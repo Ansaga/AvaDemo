@@ -7,9 +7,21 @@ function resizeGame() {
     var targetRatio = 1080 / 1920;
     var windowRatio = window.innerWidth / window.innerHeight;
     
+    // 設置基礎分辨率
+    var baseWidth = 1080;
+    var baseHeight = 1920;
+    
+    // 檢測是否為移動設備
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    // 在移動設備上使用更高的渲染分辨率
+    if (isMobile) {
+        canvas.width = baseWidth;
+        canvas.height = baseHeight;
+    }
+    
     var width, height;
     
-    // 簡單的比例計算
     if (windowRatio > targetRatio) {
         height = window.innerHeight;
         width = height * targetRatio;
@@ -22,9 +34,15 @@ function resizeGame() {
     container.style.width = window.innerWidth + 'px';
     container.style.height = window.innerHeight + 'px';
     
-    // 設置畫布
+    // 設置畫布顯示大小
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
+    
+    // 在移動設備上使用更好的縮放品質
+    if (isMobile) {
+        canvas.style.imageRendering = '-webkit-optimize-contrast';
+        canvas.style.imageRendering = 'crisp-edges';
+    }
     
     // 居中
     canvas.style.position = 'absolute';
@@ -33,7 +51,7 @@ function resizeGame() {
     canvas.style.transform = 'translate(-50%, -50%)';
 }
 
-// 只在必要時調整大小
+// 初始化
 window.addEventListener('load', function() {
     setTimeout(resizeGame, 1000);
 });
